@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.recouvrement.projet.Models.Client;
 import com.recouvrement.projet.Repositories.ClientRepository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 
 @Service
 @Transactional

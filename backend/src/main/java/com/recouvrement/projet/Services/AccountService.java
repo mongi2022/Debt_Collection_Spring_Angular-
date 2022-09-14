@@ -2,6 +2,7 @@ package com.recouvrement.projet.Services;
 
 import com.recouvrement.projet.Models.Role;
 import com.recouvrement.projet.Models.User;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
 

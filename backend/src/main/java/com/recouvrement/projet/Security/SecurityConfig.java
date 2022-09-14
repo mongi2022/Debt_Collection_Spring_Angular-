@@ -2,10 +2,12 @@ package com.recouvrement.projet.Security;
 
 import com.recouvrement.projet.Models.User;
 import com.recouvrement.projet.Security.filters.JwtAuthenticationFilter;
+import com.recouvrement.projet.Security.filters.JwtAuthorizationFilter;
 import com.recouvrement.projet.Services.AccountService;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,6 +19,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,6 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
             User user =accountService.getUserByUsername(username);
+
             Collection<GrantedAuthority> authorities= new ArrayList<>();
             user.getRoles().forEach(r -> {
 
@@ -56,11 +61,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.headers().frameOptions().disable();
-     //  http.formLogin();
+      //  http.formLogin();
       //  http.authorizeRequests().antMatchers("/h2-console/**").permitAll();
+      //  http.authorizeRequests().antMatchers(HttpMethod.POST,"/users/**").hasAuthority("ADMIN");
+        // http.authorizeRequests().antMatchers(HttpMethod.GET,"/users/**").hasAuthority("USER");
 
         http.authorizeRequests().anyRequest().authenticated();
-        http.addFilter(new JwtAuthenticationFilter(authenticationManagerBean()));
+
+       http.addFilter(new JwtAuthenticationFilter(authenticationManagerBean()));
+        http.addFilterBefore(new JwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
    @Bean
     @Override

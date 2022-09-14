@@ -4,15 +4,15 @@ import com.recouvrement.projet.Futures.RoleUserForm;
 import com.recouvrement.projet.Models.Role;
 import com.recouvrement.projet.Models.User;
 import com.recouvrement.projet.Services.AccountService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 
 import java.util.List;
+@CrossOrigin(origins = "http://localhost:4200")
 
 @RestController
+
 public class AccountRestController {
     private AccountService accountService;
 
@@ -20,11 +20,14 @@ public class AccountRestController {
         this.accountService = accountService;
     }
    @GetMapping(path = "/users")
+   //@PostAuthorize("hasAuthority('USER')")
     public List<User> getAllUsersController(){
         return accountService.getAllUsersService();
     }
     @PostMapping(path = "/users")
-   public User saveUser(@RequestBody User user){
+  // @PostAuthorize("hasAuthority('ADMIN')")
+
+    public User saveUser(@RequestBody User user){
         return accountService.addNewUser(user);
    }
     @PostMapping(path = "/roles")
@@ -33,6 +36,10 @@ public class AccountRestController {
     }
     @PostMapping(path = "/addRoleToUser")
     public void saveRoleToUser(@RequestBody RoleUserForm roleUserForm){
-         accountService.addRoleToUser(roleUserForm.getUsername(),roleUserForm.getRoleName());
+
+            accountService.addRoleToUser(roleUserForm.getUsername(),roleUserForm.getRoleName());
+
+
+
     }
 }

@@ -5,19 +5,15 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.recouvrement.projet.Services.ClientServiceImplement;
 import com.recouvrement.projet.Models.Client;
 
+@CrossOrigin(origins = "http://localhost:4200")
+
 @RestController
-@RequestMapping("Client")
+
 public class ClientController {
 private ClientServiceImplement clientServiceImplement;
 
@@ -30,10 +26,11 @@ public Client AjoutClient(@RequestBody @Valid Client client)
 {
 return clientServiceImplement.addOneClient(client);	
 }
-@GetMapping
+@GetMapping(path = "clients")
+
 public List<Client> getAllClient()
 {
-return clientServiceImplement.findClients();	
+	return clientServiceImplement.findClients();
 }
 @GetMapping("/{id}")
 public Optional<Client> getMyClient(@PathVariable String id)
